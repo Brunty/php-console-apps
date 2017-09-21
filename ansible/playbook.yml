@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vars/all.yml
+  become: yes
+  roles:
+    - php
+    - geerlingguy.mysql
+    - geerlingguy.composer

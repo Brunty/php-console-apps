@@ -1,0 +1,15 @@
+- name: Add ondrej repo for PHP
+  become: yes
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Update apt cache
+  become: yes
+  apt: update_cache=yes
+
+- name: Install PHP packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - php7.1
+    - php7.1-cli
+    - php7.1-mysql
