@@ -51,7 +51,7 @@ describe(MysqlTaskRepository::class, function () {
 
         it('throws an exception if it cannot find a task by id', function () {
             $fn = function () {
-                $this->repo->getTask('abc');
+                $this->repo->find('abc');
             };
 
             expect($fn)->toThrow(new TaskNotFoundException('Could not find task with id abc'));
@@ -59,7 +59,7 @@ describe(MysqlTaskRepository::class, function () {
 
         it('gets a task by id', function () {
             /** @var Task $task */
-            $task = $this->repo->getTask('b1b0c0ce-cc9c-458e-b648-de19e0aac496');
+            $task = $this->repo->find('b1b0c0ce-cc9c-458e-b648-de19e0aac496');
 
             expect($task->getName())->toBe('Task 3');
             expect($task->getAddedOn()->format('Y-m-d H:i:s'))->toBe('2016-10-07 01:02:03');
@@ -86,14 +86,14 @@ describe(MysqlTaskRepository::class, function () {
             fixture('tasks');
 
             /** @var Task $task */
-            $task = $this->repo->getTask('095ae2fb-cf7b-4dcd-829f-e10e3ce84a3d');
+            $task = $this->repo->find('095ae2fb-cf7b-4dcd-829f-e10e3ce84a3d');
             $task->complete();
             $task->changeName('Task 1 Updated');
 
             $this->repo->save($task);
 
             /** @var Task $updatedTask */
-            $updatedTask = $this->repo->getTask('095ae2fb-cf7b-4dcd-829f-e10e3ce84a3d');
+            $updatedTask = $this->repo->find('095ae2fb-cf7b-4dcd-829f-e10e3ce84a3d');
 
             expect($updatedTask->getName())->toBe('Task 1 Updated');
             expect($updatedTask->isComplete())->toBe(true);

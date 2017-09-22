@@ -26,11 +26,11 @@ class Task
      */
     private $isComplete = false;
 
-    public function __construct(Uuid $id, string $name, \DateTimeInterface $addedOn = null)
+    public function __construct(Uuid $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->addedOn = $addedOn ?? new \DateTimeImmutable;
+        $this->addedOn = new \DateTimeImmutable;
     }
 
     public static function fromName(string $name, \DateTimeInterface $addedOn = null): self

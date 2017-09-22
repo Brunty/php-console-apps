@@ -11,7 +11,7 @@ interface TaskRepository
 
     public function getAllIncompleteTasks(): TaskCollection;
 
-    public function getTask(string $id): Task;
+    public function find(string $id): Task;
 
     public function save(Task $task): void;
 }

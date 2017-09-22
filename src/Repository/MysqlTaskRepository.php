@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Collection\TaskCollection;
 use App\Entity\Task;
 use App\Exception\TaskNotFoundException;
+use App\Properties\PropertySetter;
 use App\Value\Uuid;
 
 final class MysqlTaskRepository implements TaskRepository
@@ -36,7 +37,7 @@ final class MysqlTaskRepository implements TaskRepository
         return $this->mapTasks($tasks);
     }
 
-    public function getTask(string $id): Task
+    public function find(string $id): Task
     {
         $stmt = $this->db->prepare('SELECT * FROM Tasks WHERE id = :task_id');
         $stmt->execute(['task_id' => $id]);
@@ -69,9 +70,10 @@ final class MysqlTaskRepository implements TaskRepository
     {
         $task = new Task(
             new Uuid($data['id']),
-            $data['name'],
-            new \DateTimeImmutable($data['added_on'])
+            $data['name']
         );
+
+        PropertySetter::set($task, 'addedOn', new \DateTimeImmutable($data['added_on']));
 
         if (isset($data['complete']) && (int) $data['complete'] === 1) {
             $task->complete();
@@ -82,7 +84,7 @@ final class MysqlTaskRepository implements TaskRepository
 
     private function updateTask(Task $task): void
     {
-        $this->getTask((string) $task->getId());
+        $this->find((string) $task->getId());
 
         $sql = <<<SQL
 UPDATE Tasks
